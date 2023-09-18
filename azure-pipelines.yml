@@ -12,7 +12,7 @@ stages:
     - script: |
         python -m pip install --upgrade pip
         pip install pylint
-        pylint <your_python_file>.py > pylint_report.txt
+        pylint main.py > pylint_report.txt
       displayName: 'Python Lint'
 
     - task: PublishBuildArtifacts@1
@@ -26,7 +26,7 @@ stages:
     - script: |
         python -m pip install --upgrade pip
         pip install bandit
-        bandit -r <your_python_file>.py > bandit_report.txt
+        bandit -r main.py > bandit_report.txt
       displayName: 'Code Vulnerability Scan'
 
     - task: PublishBuildArtifacts@1
