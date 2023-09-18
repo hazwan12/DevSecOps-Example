@@ -1,0 +1,36 @@
+trigger:
+- '*'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: LintAndScan
+  jobs:
+  - job: Lint
+    steps:
+    - script: |
+        python -m pip install --upgrade pip
+        pip install pylint
+        pylint <your_python_file>.py > pylint_report.txt
+      displayName: 'Python Lint'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: pylint_report.txt
+        artifactName: 'pylintReport'
+        publishLocation: 'Container'
+
+  - job: CodeScan
+    steps:
+    - script: |
+        python -m pip install --upgrade pip
+        pip install bandit
+        bandit -r <your_python_file>.py > bandit_report.txt
+      displayName: 'Code Vulnerability Scan'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: bandit_report.txt
+        artifactName: 'banditReport'
+        publishLocation: 'Container'
